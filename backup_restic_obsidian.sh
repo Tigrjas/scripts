@@ -1,5 +1,31 @@
 #!/bin/bash
 
+###############################################################################
+# Obsidian Vault Backup Script using Restic
+#
+# This script backs up your Obsidian vault using restic and stores
+# it on a local NFS-mounted directory. It is intended to be run manually or
+# scheduled via cron for automatic, periodic backups.
+#
+# What It Does:
+#   - Uses restic to back up your vault directory
+#   - Initializes the restic repo if it's not already initialized
+#   - Logs output to a local file for debugging and verification
+#
+# Requirements:
+#   - restic must be installed and in your PATH
+#
+# Sensitive Info:
+#   - DO NOT commit your RESTIC_PASSWORD or .env file to GitHub
+#   - Add those files to your .gitignore
+#
+# Usage:
+#   - Make script executable: chmod +x backup_restic_obsidian.sh
+#   - Run manually: ./backup_restic_obsidian.sh
+#   - Or schedule with cron:
+#       0 */6 * * * /path/to/backup_restic_obsidian.sh
+###############################################################################
+
 # Variables
 OBSIDIAN_VAULT="$HOME/Documents/Chronos"
 BACKUP_DESTINATION="/mnt/nfs/shared/backups"
