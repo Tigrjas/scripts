@@ -1,6 +1,6 @@
 """
-rename_show_files.py
---------------------
+tv_show_renamer.py
+------------------
 
 A reusable Python script to rename TV show files into a clean, consistent format.
 
@@ -10,19 +10,21 @@ Before:
     Pokemon (2012) - S02E08.mkv
     Danmachi S1 - 12.mkv
     Danmachi - 12.mkv
+    Jujutsu Kaisen (2023) - 08 - The Shibuya Incident.mkv
 After:
     Pokemon Adventure S02E08.mkv
     Danmachi S01E12.mkv
     Danmachi S01E12.mkv
+    Jujutsu Kaisen S02E08.mkv
 
 How to Use:
 -----------
 1. Adjust the variables in the CONFIGURATION section below.
 2. Run:
-       python rename_show_files.py
+       python tv_show_renamer.py
 3. The script will:
    - Walk all subfolders in FOLDER_PATH
-   - Detect S01E01, S1 - 12, or just "12"
+   - Detect various episode naming patterns
    - Rename to "SHOW_TITLE SxxExx.<original_extension>"
    - Keep them in place
    - If DRY_RUN=True → only show what would happen, no changes
@@ -39,9 +41,9 @@ import traceback
 
 
 # === ⚙️ CONFIGURATION (CHANGE THESE VALUES) ==========================
-FOLDER_PATH = r"/home/jason/Downloads/The Great Jahy Will Not Be Defeated! (2021)"  # Path to your show folder
-SHOW_TITLE = "Banana"                         # Title for renamed files
-DEFAULT_SEASON = 1                                # Used if no season number found
+FOLDER_PATH = r"/home/jason/Downloads/Jujutsu Kaisen (2020)/Season 02"  # Path to your show folder
+SHOW_TITLE = "Jujutsu Kaisen"                         # Title for renamed files
+DEFAULT_SEASON = 2                                # Used if no season number found
 DRY_RUN = False                                    # True = preview only; False = rename
 # =====================================================================
 
@@ -55,9 +57,12 @@ def rename_show_files(root_folder, show_name, default_season=1, dry_run=True):
     """
 
     patterns = [
-        re.compile(r'(S\d{1,2}E\d{1,2})', re.IGNORECASE),              # e.g. S01E08
-        re.compile(r'S(\d{1,2})\s*[-_ ]\s*(\d{1,2})', re.IGNORECASE),  # e.g. S1 - 12
-        re.compile(r'(?:E|Ep|Episode)?\s*(\d{1,2})', re.IGNORECASE),   # e.g. "12" or "Episode 12"
+        # Must be ordered from most specific to least specific
+        re.compile(r'(S\d{1,2}E\d{1,2})', re.IGNORECASE),                          # e.g. S01E08
+        re.compile(r'\(\d{4}\)\s*[-_]\s*(\d{1,2})\s*[-_]', re.IGNORECASE),         # e.g. (2023) - 08 -
+        re.compile(r'S(\d{1,2})\s*[-_ ]\s*(\d{1,2})', re.IGNORECASE),              # e.g. S1 - 12
+        re.compile(r'[-_]\s*(\d{1,2})\s*[-_]', re.IGNORECASE),                     # e.g. - 08 -
+        re.compile(r'(?:E|Ep|Episode)\s*(\d{1,2})', re.IGNORECASE),                # e.g. "Episode 12"
     ]
 
     renamed_count = 0
@@ -81,7 +86,7 @@ def rename_show_files(root_folder, show_name, default_season=1, dry_run=True):
                     for pattern in patterns:
                         match = pattern.search(file)
                         if match:
-                            if len(match.groups()) == 1 and 'E' in match.group(1).upper():
+                            if len(match.groups()) == 1 and 'E' in match.group(0).upper():
                                 # Case like S01E08
                                 season_episode = match.group(1).upper()
                             elif len(match.groups()) == 2:
@@ -90,7 +95,7 @@ def rename_show_files(root_folder, show_name, default_season=1, dry_run=True):
                                 episode_num = int(match.group(2))
                                 season_episode = f"S{season_num:02d}E{episode_num:02d}"
                             elif len(match.groups()) == 1:
-                                # Case like "Episode 12" or just "12"
+                                # Case like "Episode 12", "(2023) - 08 -", or "- 08 -"
                                 episode_num = int(match.group(1))
                                 season_episode = f"S{default_season:02d}E{episode_num:02d}"
                             break
