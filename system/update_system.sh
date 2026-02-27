@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# Raspberry Pi 4 Automatic Update Script
+# General Linux Automatic Update Script
 # ==============================================
 # This script updates the system packages, removes unnecessary files, 
 # and optionally reboots the system if needed.
 #
 # USAGE:
-# 1. Make the script executable: chmod +x update_pi.sh
-# 2. Run it manually: ./update_pi.sh
+# 1. Make the script executable: chmod +x update_system.sh
+# 2. Run it manually: ./update_system.sh
 # 3. (Optional) Schedule it via cron for automation.
 
 # Logging setup
-LOG_DIR="$HOME/logs/pi-update"
+LOG_DIR="$HOME/logs/system-update"
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/update-$(date +%Y-%m-%d).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "================================================"
-echo " Raspberry Pi 4 Update - $(date)"
+echo " System Update - $(date)"
 echo "================================================"
 
 # Update package list and upgrade packages
