@@ -43,6 +43,7 @@ APT_TOOLS=(
   # editors & terminal tools
   micro
   btop
+  git
   # file & search utilities
   # ripgrep
   # fd-find
