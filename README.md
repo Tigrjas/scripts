@@ -1,21 +1,25 @@
-# Utility Scripts Collection
-This repository is a grab bag of handy tools—mostly Bash scripts—designed to automate various system maintenance tasks like backups, updates, and other repetitive operations
+# Useful Scripts Collection
 
-## Types of Scripts
-This repo contains a variety of scripts, including but not limited to:
-- **Backup Scripts** – Automate backups of files, directories, or configurations.
-- **Update Scripts** – Keep software or system components up to date.
-- **Other Utilities** – Any useful one-off or experimental tools I’ve written.
+This repository contains a collection of useful scripts to automate various tasks in your personal or development setup.
 
-Each script is standalone and does not require this repository to be installed as a package.
+## Folder Structure:
+- **backup/**: Scripts related to backup and synchronization.
+  - **backup_restic_obsidian.sh**: Backs up your Obsidian vault using Restic.
+  - **sync_backup_locations.sh**: Syncs your backup with your desktop.
 
-## Usage
+- **media_management/**: Scripts for managing and processing media files.
+  - **/immich_uploader**: Helps upload process to immich
+  - **add_chapters_to_video.py**: Adds chapters to a video file.
+  - **merge_xmp_files.py**: Merges XMP metadata with its corresponding image file.
+  - **tv_show_renamer.py**: Renames TV shows.
+
+- **system/**: System maintenance and update scripts.
+  - **update_pi.sh**: Updates a Raspberry Pi system (works with any system using `apt`).
+
+## How to Use
+Navigate to the appropriate directory and execute the scripts:
+
+For example, to sync your backup:
 ```bash
-git clone git@github.com:Tigrjas/scripts.git
-cd scripts
-```
-Make sure script is executable before running
-```bash
-chmod +x ./your-script.sh
-./script_name.sh
-```
+cd scripts/backup
+bash sync-backup-to-desktop.sh
