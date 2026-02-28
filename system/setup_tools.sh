@@ -44,6 +44,7 @@ APT_TOOLS=(
   micro
   btop
   git
+  duf
   # file & search utilities
   # ripgrep
   # fd-find
